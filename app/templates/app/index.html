@@ -37,8 +37,30 @@
 
   <body>
     <main class="container">
-      <a href="/app/data_input">data input</a>
-      <a href="/app/qr_code">QR code</a>
+      <table class="table table-bordered">
+        <tr>
+          <td>
+            <a href="/app/data_input">data input</a>
+          </td>
+          <td>
+            <a href="/app/qr_code">QR code</a>
+          </td>
+          <td>
+            <a href="/app/trace_input/?user_id=fx00000&line=fuji&kote=M01"
+              >trace input(M01)</a
+            >
+          </td>
+          <td>
+            <a href="/app/trace_input/?user_id=fx00000&line=fuji&kote=M02"
+              >trace input(M02)</a
+            >
+          </td>
+          <td>
+            <a href="/app/trace_list/?user_id=fx00000&line=fuji">trace list</a>
+          </td>
+        </tr>
+      </table>
+
       <h2>{{ title }}</h2>
       <input type="button" value="開始" class="btn btn-primary" id="btn1" />
       <input type="button" value="停止" class="btn btn-primary" id="btn2" />
