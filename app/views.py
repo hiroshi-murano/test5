@@ -95,12 +95,13 @@ def trace_list(request):
 
         conn = sqlite3.connect(DB)
         cur = conn.cursor()
-        cmd = "select *  from trace_data where user_id=? and line=? order by id"
+        cmd = "select *  from trace_data where user_id=? and line=? and date_time>=? order by id"
 
         # print('---------')
         # print(cmd)
         # print('---------')
-        cur.execute(cmd, [user_id, line])
+        today = datetime.datetime.now()  # 現在の日時を取得
+        cur.execute(cmd, [user_id, line, today.strftime("%Y/%m/%d")])
         lst = cur.fetchall()
 
         # print(lst)
