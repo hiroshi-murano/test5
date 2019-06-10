@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link rel="shortcut icon" href="" />
+
+    <!-- jqruery.js -->
+    <script
+      type="text/javascript"
+      src="{% static 'app/js/jquery-3.4.0.min.js' %}"
+    ></script>
+
+    <!-- bootstrap -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'app/css/bootstrap.min.css' %}"
+    />
+    <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+  </head>
+
+  <body>
+    <main class="container">
+      <a href="/app">app</a>
+      <h2>trace input</h2>
+      <input type="button" value="ON" class="btn btn-primary" id="btn1" />
+      <input type="button" value="OFF" class="btn btn-primary" id="btn2" />
+      <br />
+      ユーザー<input
+        type="text"
+        id="user_id"
+        class="form-control"
+        value="{{ user_id }}"
+      />
+      ライン<input
+        type="text"
+        id="line"
+        class="form-control"
+        value="{{ line }}"
+      />
+      工程<input
+        type="text"
+        id="kote"
+        class="form-control"
+        value="{{ kote }}"
+      />
+      ステータス<input type="text" id="status" class="form-control" />
+      データ<input type="text" id="data" class="form-control" /> PC名<input
+        type="text"
+        id="pc_name"
+        class="form-control"
+      />
+
+      <a href="/app/qr_code2?url={{ request.build_absolute_uri }}">go</a>
+
+      <input type="button" value="QR CODE" class="btn btn-primary" id="btn3" />
+    </main>
+
+    <script>
+      // ボタンを押した処理
+      $("#btn1").on("click", function() {
+        // var keyword1 = $("#keyword1").val();
+        // var keyword2 = $("#keyword2").val();
+        // console.log(keyword1);
+        console.log($("#user_id").val());
+        console.log($("#line").val());
+
+        $.ajax({
+          url: "/app/api_02/",
+          type: "POST",
+          data: {
+            user_id: $("#user_id").val(),
+            line: $("#line").val(),
+            kote: $("#kote").val(),
+            status: "ON",
+            data: $("#data").val(),
+            pc_name: $("#pc_name").val()
+          }
+        })
+          // Ajaxリクエストが成功した時発動
+          .done(data => {
+            $("#msg").text(JSON.stringify(data, null, "\t"));
+          })
+          // Ajaxリクエストが失敗した時発動
+          .fail(data => {
+            $("#msg").text(JSON.stringify(data, null, "\t"));
+          });
+      });
+
+      $("#btn2").on("click", function() {
+        $.ajax({
+          url: "/app/api_02/",
+          type: "POST",
+          data: {
+            user_id: $("#user_id").val(),
+            line: $("#line").val(),
+            kote: $("#kote").val(),
+            status: "OFF",
+            data: $("#data").val(),
+            pc_name: $("#pc_name").val()
+          }
+        })
+          // Ajaxリクエストが成功した時発動
+          .done(data => {
+            $("#msg").text(JSON.stringify(data, null, "\t"));
+          })
+          // Ajaxリクエストが失敗した時発動
+          .fail(data => {
+            $("#msg").text(JSON.stringify(data, null, "\t"));
+          });
+      });
+
+      $("#btn3").on("click", function() {
+        // var keyword1 = $("#keyword1").val();
+        // var keyword2 = $("#keyword2").val();
+        // console.log(keyword1);
+        console.log("btn3");
+
+        var url1 = "{{ request.build_absolute_uri }}";
+        var url2 = encodeURIComponent("{{ request.build_absolute_uri }}");
+
+        console.log(url2);
+        // console.log(url2);
+
+        window.location.href = "/app/qr_code2/?url=" + url2;
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link rel="shortcut icon" href="" />
+
+    <!-- jqruery.js -->
+    <script
+      type="text/javascript"
+      src="{% static 'app/js/jquery-3.4.0.min.js' %}"
+    ></script>
+
+    <!-- bootstrap -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'app/css/bootstrap.min.css' %}"
+    />
+    <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+  </head>
+
+  <body>
+    <main class="container">
+      <a href="/app">app</a>
+      <h2>文字列をPOSTで送信し、加工したものをJSONで返す</h2>
+      <input type="text" id="keyword1" class="form-control" />
+      <input type="button" value="開始" class="btn btn-primary" id="btn1" />
+      <input type="button" value="停止" class="btn btn-primary" id="btn2" />
+      <input type="button" value="リセット" class="btn btn-primary" id="btn3" />
+      <h5>
+        <pre id="msg">ここに結果を表示</pre>
+      </h5>
+    </main>
+
+    <script>
+      // ボタンを押した処理
+      $('#btn1').on('click', function() {
+        var keyword1 = $('#keyword1').val()
+        console.log(keyword1)
+
+        $.ajax({
+          url: '/app/api_01/',
+          type: 'POST',
+          data: { keyword1: 1, keyword2: GetDateString() }
+        })
+          // Ajaxリクエストが成功した時発動
+          .done(data => {
+            $('#msg').text(JSON.stringify(data, null, '\t'))
+          })
+          // Ajaxリクエストが失敗した時発動
+          .fail(data => {
+            $('#msg').text(JSON.stringify(data, null, '\t'))
+          })
+      })
+
+      $('#btn2').on('click', function() {
+        var keyword1 = $('#keyword1').val()
+        console.log(keyword1)
+
+        $.ajax({
+          url: '/app/api_01/',
+          type: 'POST',
+          data: { keyword1: 0, keyword2: GetDateString() }
+        })
+          // Ajaxリクエストが成功した時発動
+          .done(data => {
+            $('#msg').text(JSON.stringify(data, null, '\t'))
+          })
+          // Ajaxリクエストが失敗した時発動
+          .fail(data => {
+            $('#msg').text(JSON.stringify(data, null, '\t'))
+          })
+      })
+
+      // ボタンを押さなくてもリターンキーで実行する
+      $('#keyword1').keypress(function(e) {
+        if (e.which == 13) {
+          $('#btn1').click()
+        }
+      })
+
+      function GetDateString() {
+        var d = new Date()
+        var year = d.getFullYear()
+        var month = ('0' + (d.getMonth() + 1)).slice(-2)
+        var day = ('0' + d.getDate()).slice(-2)
+        var hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+        var min = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+        var sec = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
+        var date_str =
+          year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
+
+        return date_str
+      }
+    </script>
+  </body>
+</html>

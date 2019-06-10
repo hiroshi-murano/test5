@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>正味作業</title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link rel="shortcut icon" href="" />
+
+    <!-- jqruery.js -->
+    <script
+      type="text/javascript"
+      src="{% static 'app/js/jquery-3.4.0.min.js' %}"
+    ></script>
+
+    <!-- bootstrap -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'app/css/bootstrap.min.css' %}"
+    />
+    <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+
+    <script src="{% static 'app/js/plotly-latest.min.js' %}"></script>
+
+    <!-- 一定時間でリフレッシュ -->
+    <meta http-equiv="refresh" content="10" />
+  </head>
+
+  <body>
+    <main class="container">
+      <a href="/app/data_input">data input</a>
+      <a href="/app/qr_code">QR code</a>
+      <h2>{{ title }}</h2>
+      <input type="button" value="開始" class="btn btn-primary" id="btn1" />
+      <input type="button" value="停止" class="btn btn-primary" id="btn2" />
+
+      <div id="myDiv">
+        <!-- Plotly chart will be drawn inside this DIV -->
+      </div>
+    </main>
+
+    <script>
+
+
+      var selectorOptions = {
+          buttons: [{
+              step: 'second',
+              stepmode: 'todate',
+              count: 10,
+              label: '10秒'
+          }, {
+              step: 'second',
+              stepmode: 'backward',
+              count: 30,
+              label: '30秒'
+            }, {
+              step: 'minute',
+              stepmode: 'backward',
+              count: 1,
+              label: '1分'
+            }, {
+              step: 'minute',
+              stepmode: 'backward',
+              count: 5,
+              label: '5分'
+            }, {
+              step: 'minute',
+              stepmode: 'backward',
+              count: 10,
+              label: '10分'
+            }, {
+              step: 'minute',
+              stepmode: 'backward',
+              count: 30,
+              label: '30分'
+          }, {
+              step: 'hour',
+              stepmode: 'backward',
+              count: 1,
+              label: '1時間'
+            }, {
+              step: 'hour',
+              stepmode: 'backward',
+              count: 6,
+              label: '6時間'
+            }, {
+              step: 'hour',
+              stepmode: 'backward',
+              count: 12,
+              label: '12時間'
+            }, {
+              step: 'day',
+              stepmode: 'backward',
+              count: 1,
+              label: '1日'
+          }, {
+              step: 'all',
+          }],
+      };
+
+
+
+                  var layout = {
+                      title: 'ムダ作業分析',
+                      xaxis: {
+                   //    range: ["2018-02-01 12:16:38", "2018-02-01 12:17:58"],
+                          rangeslider: {},
+                          rangeselector: selectorOptions,
+                      },
+                      yaxis: {
+                          fixedrange: true
+                      }
+                  };
+                  var data = [
+                      {
+                          x: {{ data_x | safe }},
+                          y:  {{ data_y | safe }},
+                          line: { shape: 'hv' },
+                          type: 'scatter',
+                          fill: 'tozeroy',
+                      }
+                  ];
+
+                  Plotly.newPlot('myDiv', data, layout, { showSendToCloud: true });
+
+
+                  // ボタンを押した処理
+                  $("#btn1").on("click", function() {
+
+
+
+                    // Plotly.restyle('myDiv', 'x', ['2019-04-18 16:00:00','2019-04-18 16:00:10','2019-04-18 16:00:13','2019-04-18 16:00:20']);
+                    // Plotly.restyle('myDiv', 'y', [1,0,1,0]);
+
+                    // var update = {
+                    //   x:  ['2019-04-18 16:00:00','2019-04-18 16:00:10','2019-04-18 16:00:13','2019-04-18 16:00:20'],
+                    //   y:  [1,0,1,0],
+                    // };
+
+                    // Plotly.restyle('myDiv', update, [0,1,2,3])
+
+                    myDiv.data[0]['x'].push(GetDateString())
+                    myDiv.data[0]['y'].push(1)
+
+
+                    Plotly.redraw(myDiv);
+
+
+                    // console.log('更新');
+                  });
+
+              // ボタンを押した処理
+              $("#btn2").on("click", function() {
+
+
+
+                myDiv.data[0]['x'].push(GetDateString())
+                myDiv.data[0]['y'].push(0)
+
+
+                Plotly.redraw(myDiv);
+
+
+            // console.log('更新');
+            });
+
+
+                  function GetDateString() {
+                    var d = new Date()
+                    var year = d.getFullYear()
+                    var month = ('0' + (d.getMonth() + 1)).slice(-2)
+                    var day = ('0' + d.getDate()).slice(-2)
+                    var hour = d.getHours() < 10 ? '0' + d.getHours() : d.getHours()
+                    var min = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes()
+                    var sec = d.getSeconds() < 10 ? '0' + d.getSeconds() : d.getSeconds()
+                    var date_str =
+                      year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec
+
+                    return date_str
+                  }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link rel="shortcut icon" href="" />
+
+    <!-- jqruery.js -->
+    <script
+      type="text/javascript"
+      src="{% static 'app/js/jquery-3.4.0.min.js' %}"
+    ></script>
+
+    <!-- bootstrap -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'app/css/bootstrap.min.css' %}"
+    />
+    <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+
+    <!-- <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> -->
+
+    <script src="{% static 'app/js/plotly-latest.min.js' %}"></script>
+  </head>
+
+  <body>
+    <main class="container">
+      <h1>qr code</h1>
+      <input
+        type="button"
+        value="QRコード取得"
+        class="btn btn-primary"
+        id="btn1"
+      />
+
+      <a href="/app/">top</a>
+      <h3>{{ request.build_absolute_uri }}</h3>
+      <h3>{{ request.get_host }}</h3>
+      <h3>{{ img_file }}</h3>
+      <h3>{{ url }}</h3>
+      <a href="/app/qr_code?url={{ request.get_host }}">go</a>
+      <img src="/static/app/img/{{ img_file }}" />
+    </main>
+
+    <script>
+      // ボタンを押した処理
+      $("#btn1").on("click", function() {
+        console.log("aaaaa");
+
+        $.ajax({
+
+          console.log("bbb")
+
+        }).then( console.log("ccc"),  console.log("ddd") )
+
+        //    $.ajax({
+        //      url: "/app/qr_code/",
+        //      type: "GET",
+        //      data: { url: "abc" },
+        //    })
+        //      // Ajaxリクエストが成功した時発動
+        //      .done(data => {
+        //        $("#msg").text(JSON.stringify(data, null, "\t"));
+        //      })
+
+        //      // Ajaxリクエストが失敗した時発動
+        //      .fail(data => {
+        //        $("#msg").text(JSON.stringify(data, null, "\t"));
+        //      })
+        //  })
+
+        // ボタンを押さなくてもリターンキーで実行する
+        // $("#keyword1").keypress(function(e) {
+        //   if (e.which == 13) {
+        //     $("#btn1").click();
+        //   }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta charset="utf-8" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="" />
+    <link rel="shortcut icon" href="" />
+
+    <!-- jqruery.js -->
+    <script
+      type="text/javascript"
+      src="{% static 'app/js/jquery-3.4.0.min.js' %}"
+    ></script>
+
+    <!-- bootstrap -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'app/css/bootstrap.min.css' %}"
+    />
+    <script src="{% static 'app/js/bootstrap.min.js' %}"></script>
+  </head>
+
+  <body>
+    <main class="container">
+      <a href="/app">app</a>
+      <h2>trace list</h2>
+
+      <table class="table table-bordered">
+        <tr>
+          <th>id</th>
+          <th>ユーザー</th>
+          <th>ライン</th>
+          <th>工程</th>
+          <th>ステータス</th>
+          <th>データ</th>
+          <th>時刻</th>
+          <th>PC名</th>
+        </tr>
+
+        {% for row in data %}
+        <tr>
+          <td>{{ row.0 }}</td>
+          <td>{{ row.1 }}</td>
+          <td>{{ row.2 }}</td>
+          <td>{{ row.3 }}</td>
+          <td>{{ row.4 }}</td>
+          <td>{{ row.5 }}</td>
+          <td>{{ row.6 }}</td>
+          <td>{{ row.7 }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </main>
+
+    <script>
+      // ボタンを押した処理
+      $("#btn1").on("click", function() {
+        var keyword1 = $("#keyword1").val();
+        var keyword2 = $("#keyword2").val();
+        console.log(keyword1);
+        console.log(keyword2);
+
+        $.ajax({
+          url: "/app/api_02/",
+          type: "POST",
+          data: {
+            user_id: $("#user_id").val(),
+            line: $("#line").val(),
+            kote: $("#kote").val(),
+            status: $("#status").val(),
+            data: $("#data").val(),
+            pc_name: $("#pc_name").val()
+          }
+        })
+          // Ajaxリクエストが成功した時発動
+          .done(data => {
+            $("#msg").text(JSON.stringify(data, null, "\t"));
+          })
+          // Ajaxリクエストが失敗した時発動
+          .fail(data => {
+            $("#msg").text(JSON.stringify(data, null, "\t"));
+          });
+      });
+    </script>
+  </body>
+</html>
